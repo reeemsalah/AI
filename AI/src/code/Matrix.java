@@ -1,12 +1,34 @@
 package code;
 
+import java.util.Arrays;
 
 public class Matrix extends SearchProblem {
-
+	public static Position telephone;
+	public Matrix() {
+		this.operators=Arrays.asList(NeoActions.values());
+	}
 	@Override
-	public boolean goalTest() {
-		// TODO Auto-generated method stub
-		return false;
+	/**
+	 * String state is Neo's position ;
+	   each hostage state: (dead:0, alive:1, or turned:2), at the telephone booth:1 or not:0, is being carried by Neo:1 or not:0	
+	 */
+	public boolean goalTest(String state) {
+		String[]parsedState=state.split(";");
+		int NeoX=Integer.parseInt(parsedState[0].split(",")[0]);
+		int NeoY=Integer.parseInt(parsedState[0].split(",")[1]);
+		if(NeoX!=telephone.x||NeoY!=telephone.y)//not at the telephone booth
+			return false;
+		String []hostages=parsedState[1].split(",");
+		for(int i=0;i<hostages.length/3;i++) {
+			char hostageState=hostages[i].charAt(0);
+			char hostageAtTB=hostages[i+1].charAt(0);
+			char hostageCarried=hostages[i+2].charAt(0);
+			if(hostageState!='0'&&hostageAtTB=='0')
+				return false;
+			if(hostageAtTB=='1'&&hostageCarried=='1')
+				return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -14,6 +36,7 @@ public class Matrix extends SearchProblem {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
 	public static Position generatePosition(int rows,int columns,boolean[][]filled,String[][]gridView,String s){
 		int x=-1;
 		int y=-1;
@@ -45,7 +68,7 @@ public class Matrix extends SearchProblem {
 		Position neo=generatePosition(rows,columns,filled,gridView,"Neo");
 		grid+=neo+";"+"\n";
 		//telephone booth position
-		Position telephone=generatePosition(rows,columns,filled,gridView,"TB"+" ");
+		telephone=generatePosition(rows,columns,filled,gridView,"TB"+" ");
 		grid+=telephone+";"+"\n";
 		//hostages positions
 		int hostages=(int) (Math.random()*8+3);
@@ -121,8 +144,8 @@ public class Matrix extends SearchProblem {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println(genGrid());
-
+		//System.out.println(genGrid());
+		//System.out.println(Arrays.asList(NeoActions.values()));
 	}
 
 }
