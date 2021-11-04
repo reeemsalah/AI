@@ -10,5 +10,9 @@ public class Position {
 	public String toString() {
 		return(this.x+","+this.y);
 	}
+	
+	public boolean equals(Position pop) {
+		return(this.x==pop.x&&this.y==pop.y);
+	}
 
 }
