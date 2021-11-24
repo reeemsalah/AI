@@ -638,7 +638,7 @@ public class Matrix extends SearchProblem {
 		queue.add(root);
 		do{
 			MatrixSearchTreeNode node = queue.remove();
-			System.out.println(node);
+//			System.out.println(node);
 			m.nodesExp++;
 			if(m.goalTest(node.state))
 				return node;
@@ -647,7 +647,7 @@ public class Matrix extends SearchProblem {
 				if (newNode != null)
 					queue.add(newNode);
 			}
-			printQueue(queue);
+//			printQueue(queue);
 
 			//System.out.println(m.nodesExp);
 		}
