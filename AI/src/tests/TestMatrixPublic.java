@@ -701,6 +701,7 @@ public class TestMatrixPublic {
 						}
 						if(xyzw.contains(led)) {
 							xyzw.remove(led);
+							System.out.println("turned and killed "+led);
 							this.m23++;
 						}
 					}
@@ -774,9 +775,14 @@ public class TestMatrixPublic {
 				
 				for(String abc: m6.keySet()) {
 					int beatles = m6.get(abc)+2;
+					if(abc.equals("3,3")) {
+						System.out.println(abc);
+						System.out.println(beatles);	
+					}
 					if(beatles >= 100)  {
 						this.edu(abc);
 						m6.put(abc,100);
+						System.out.println("died while carried "+abc+" "+x00+","+x01);
 					}
 					else 
 						m6.put(abc,beatles);
@@ -787,6 +793,7 @@ public class TestMatrixPublic {
 					if(beatles >= 100) {
 						this.edu(abc);
 						xyzw.add(abc);
+						System.out.println("turned "+abc);
 					}
 					else 
 						newm7.put(abc,beatles);
@@ -868,32 +875,44 @@ public class TestMatrixPublic {
 					switch (actions[i]) {
 					case "up":
 						linkin = s.f2();
+						
 						break;
 					case "down":
 						linkin = s.f3();
+						
 						break;
 					case "right":
 						linkin = s.f4();
+						
 						break;
 					case "left":
 						linkin = s.applyLeft();
+						
 						break;
 					case "carry":
 						linkin = s.f209();
+						
 						break;
 					case "drop":
+						
 						linkin = s.f220();
+						System.out.println(linkin);
+						
 						break;
 					case "fly":
 						linkin = s.f320();
+						
 						break;
 					case "takePill":
 						linkin = s.f32();
+						
 						break;
 					case "kill":
 						linkin = s.f100();
+						
 						break;
-					default: linkin = false; break;
+					default: 
+						linkin = false; break;
 								
 					}
 
@@ -903,6 +922,13 @@ public class TestMatrixPublic {
 						
 						
 				}
+				System.out.println(s.m7.keySet());
+				System.out.println(s.m7.values());
+
+				System.out.println(s.m23+" "+doors);
+				System.out.println(s.m10+" "+blue);
+				System.out.println(s.grace());
+
 				return s.grace() && s.m23 == doors && s.m10.size() == blue;
 			}
 }
