@@ -8,6 +8,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
 
+import jdk.internal.misc.FileSystemOption;
+
 
 public class Matrix extends SearchProblem {
 	String grid;
@@ -35,7 +37,7 @@ public class Matrix extends SearchProblem {
 		}
 		//adding Neo's Damage
 		this.initialState+="0";//Neo's damage
-		////System.out.println(initialState);
+		//////System.out.println(initialState);
 		//Adding the initial state to generates states
 		generatedStates.add((this.initialState));
 		
@@ -59,31 +61,31 @@ public class Matrix extends SearchProblem {
 		Position[]agents=new Position[agentList.length/2];
 		for(int i=0;i<agents.length;i++) {
 			agents[i]=new Position(Integer.parseInt(agentList[i*2]),Integer.parseInt(agentList[i*2+1]));
-			////System.out.println("agent "+i+" "+agents[i]);
+			//////System.out.println("agent "+i+" "+agents[i]);
 		}
 		String[] pillList=parsedState[5].split(",");	
 		Position[]pills=new Position[pillList.length/2];
 		for(int i=0;i<pills.length;i++) {
 			pills[i]=new Position(Integer.parseInt(pillList[i*2]),Integer.parseInt(pillList[i*2+1]));
-			////System.out.println("pill "+i+" "+pills[i]);
+			//////System.out.println("pill "+i+" "+pills[i]);
 		}
 		String[] padList=parsedState[6].split(",");	
 		Position[]startPads=new Position[padList.length/4];
 		Position[]endPads=new Position[padList.length/4];
 		for(int i=0;i<startPads.length;i++) {
 			startPads[i]=new Position(Integer.parseInt(padList[i*4]),Integer.parseInt(padList[i*4+1]));
-			// ////System.out.println("start pad "+i+" "+startPads[i]);
+			// //////System.out.println("start pad "+i+" "+startPads[i]);
 			endPads[i]=new Position(Integer.parseInt(padList[i*4+2]),Integer.parseInt(padList[i*4+3]));
-			// ////System.out.println("end pad "+i+" "+endPads[i]);
+			// //////System.out.println("end pad "+i+" "+endPads[i]);
 		}
 		String[]hostageList=parsedState[7].split(",");
 	    Position[]hostages=new Position[hostageList.length/3];
 	    int[]hostagesDamage=new int[hostageList.length/3];
 		for(int i=0;i<hostages.length;i++) {
 			hostages[i]=new Position(Integer.parseInt(hostageList[i*3]),Integer.parseInt(hostageList[i*3+1]));
-			////System.out.println("Hostage: "+i+" "+hostages[i]);
+			//////System.out.println("Hostage: "+i+" "+hostages[i]);
 			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
-			////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
+			//////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
 		}
 		int[]hostagesState=new int [hostages.length];
 		for(int i=0;i<parsedState[8].split(",").length;i++)
@@ -141,31 +143,31 @@ public class Matrix extends SearchProblem {
 		Position[]agents=new Position[agentList.length/2];
 		for(int i=0;i<agents.length;i++) {
 			agents[i]=new Position(Integer.parseInt(agentList[i*2]),Integer.parseInt(agentList[i*2+1]));
-			//////System.out.println("agent "+i+" "+agents[i]);
+			////////System.out.println("agent "+i+" "+agents[i]);
 		}
 		String[] pillList=parsedState[5].split(",");	
 		Position[]pills=new Position[pillList.length/2];
 		for(int i=0;i<pills.length;i++) {
 			pills[i]=new Position(Integer.parseInt(pillList[i*2]),Integer.parseInt(pillList[i*2+1]));
-			//////System.out.println("pill "+i+" "+pills[i]);
+			////////System.out.println("pill "+i+" "+pills[i]);
 		}
 		String[] padList=parsedState[6].split(",");	
 		Position[]startPads=new Position[padList.length/4];
 		Position[]endPads=new Position[padList.length/4];
 		for(int i=0;i<startPads.length;i++) {
 			startPads[i]=new Position(Integer.parseInt(padList[i*4]),Integer.parseInt(padList[i*4+1]));
-			//////System.out.println("start pad "+i+" "+startPads[i]);
+			////////System.out.println("start pad "+i+" "+startPads[i]);
 			endPads[i]=new Position(Integer.parseInt(padList[i*4+2]),Integer.parseInt(padList[i*4+3]));
-			//////System.out.println("end pad "+i+" "+endPads[i]);
+			////////System.out.println("end pad "+i+" "+endPads[i]);
 		}
 		String[]hostageList=parsedState[7].split(",");
 	    Position[]hostages=new Position[hostageList.length/3];
 	    int[]hostagesDamage=new int[hostageList.length/3];
 		for(int i=0;i<hostages.length;i++) {
 			hostages[i]=new Position(Integer.parseInt(hostageList[i*3]),Integer.parseInt(hostageList[i*3+1]));
-			//////System.out.println("Hostage: "+i+" "+hostages[i]);
+			////////System.out.println("Hostage: "+i+" "+hostages[i]);
 			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
-			//////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
+			////////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
 		}
 		String[]hostagesState=new String [hostages.length];
 		for(int i=0;i<parsedState[8].split(",").length;i++)
@@ -179,7 +181,7 @@ public class Matrix extends SearchProblem {
 		int hostageIndexEdgeCase = getIndex(NeoR, NeoC,hostages);
 		
 		if(hostageIndexEdgeCase >-1) {
-			if( hostagesDamage[hostageIndexEdgeCase]>=98 && (NeoActions)o!= NeoActions.CARRY)
+			if( hostagesDamage[hostageIndexEdgeCase]>=98 && hostagesState[hostageIndexEdgeCase].charAt(0)!='2' &&(NeoActions)o!= NeoActions.CARRY)
 				return null;
 			
 		}
@@ -255,7 +257,8 @@ public class Matrix extends SearchProblem {
 				if(NeoDamage<0)
 					NeoDamage=0;
 				for(int i=0;i<hostagesDamage.length;i++)
-					if(hostagesDamage[i]<100) {
+					if(!(hostages[i].x == TeleX && hostages[i].y == TeleY && hostagesState[i].charAt(0) == '0') 
+							&& hostagesDamage[i]<100) {
 						hostagesDamage[i]-=22;
 						if(hostagesDamage[i]<0)
 							hostagesDamage[i]=0;
@@ -452,8 +455,8 @@ public class Matrix extends SearchProblem {
 	}
 
 	public MatrixSearchTreeNode expand(MatrixSearchTreeNode node, Operator o){
-//        if (!allowExpandAction(node.operator, o))
-//            return null;
+        if (!allowExpandAction(node.operator, o))
+            return null;
         String nextState = stateSpace(node.state, o);
         if (nextState == null||this.generatedStates.contains((nextState)))
 			return null;
@@ -568,18 +571,18 @@ public class Matrix extends SearchProblem {
 //		visualization
 //		for(int i =-1;i<columns;i++)
 //		{
-//			////System.out.print(i+"     ");
+//			//////System.out.print(i+"     ");
 //		}
-//		////System.out.println();
+//		//////System.out.println();
 //		for(int i=0;i<gridView.length;i++)
 //		{
 //			
-//			////System.out.print(i+": ");
+//			//////System.out.print(i+": ");
 //			for(int j=0;j<gridView[i].length;j++)
 //			{
-//				////System.out.print(gridView[i][j]+" ");
+//				//////System.out.print(gridView[i][j]+" ");
 //			}
-//			////System.out.println();
+//			//////System.out.println();
 //		}
 		return(grid);
 	}
@@ -627,6 +630,7 @@ public class Matrix extends SearchProblem {
 				
 				break;
 		}
+		//System.out.println(m.nodesExp);
 		if(solNode==null)
 			return "No Solution";
 
@@ -642,7 +646,7 @@ public class Matrix extends SearchProblem {
 		queue.add(root);
 		do{
 			MatrixSearchTreeNode node = queue.remove();
-//			System.out.println(node);
+//			//System.out.println(node);
 			m.nodesExp++;
 			if(m.goalTest(node.state))
 				return node;
@@ -653,7 +657,7 @@ public class Matrix extends SearchProblem {
 			}
 //			printQueue(queue);
 
-			//System.out.println(m.nodesExp);
+			////System.out.println(m.nodesExp);
 		}
 		while(!queue.isEmpty());
 		return null;
@@ -698,6 +702,7 @@ public class Matrix extends SearchProblem {
 		Queue<MatrixSearchTreeNode> queue = new LinkedList<MatrixSearchTreeNode>();
 		List<NeoActions> operators = Arrays.asList(NeoActions.values());
 		queue.add(root);
+		int i=0;
 		do{
 			MatrixSearchTreeNode node = queue.remove();
 			m.nodesExp++;
@@ -705,13 +710,17 @@ public class Matrix extends SearchProblem {
 				return node;
 			for(Operator o : operators){
 				MatrixSearchTreeNode newNode = m.expand(node, o);
+				i++;
 				if (newNode != null) {
-//					System.out.println(o);
+//					//System.out.println(node.depth+" "+node.operator + " "+node.state);
+//					//System.out.println("  "+o +" "+newNode.state);
+//					//System.out.println();
+
 					queue.add(newNode);
 				}
 			}
 		}
-		while(!queue.isEmpty());
+		while(!queue.isEmpty() );
 		return null;
 	}
 	private static MatrixSearchTreeNode DFS(MatrixSearchTreeNode root, Matrix m) {
@@ -725,8 +734,12 @@ public class Matrix extends SearchProblem {
 				return node;
 			for(Operator o : operators){
 				MatrixSearchTreeNode newNode = m.expand(node, o);
-				if (newNode != null)
+				if (newNode != null) {
+					//System.out.println(node.depth+" "+node.operator + " "+node.state);
+					//System.out.println("  "+o +" "+newNode.state);
+					//System.out.println();
 					stack.push(newNode);
+				}
 			}
 		}
 		while(!stack.isEmpty());
@@ -751,7 +764,6 @@ public class Matrix extends SearchProblem {
 					if (newNode != null)
 						stack.push(newNode);
 				}
-				//System.out.println(m.nodesExp);
 			}
 			while(!stack.isEmpty()&&node.depth<=l);
 		}
@@ -763,27 +775,28 @@ public class Matrix extends SearchProblem {
 	
 		for(int i=0;i<arr.length;i++)
 		{
-			System.out.print((MatrixSearchTreeNode)arr[i]+" ");
+			//System.out.print((MatrixSearchTreeNode)arr[i]+" ");
 		}
-		System.out.println();
+		//System.out.println();
 	}
 	public static void main(String[] args) {
 		String g=genGrid();
 		String grid0 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
 		String gSmall="3,3;2;0,0;2,2;1,1;1,0;0,2,2,0,2,0,0,2;1,2,20";
+		String grid2 = "5,5;2;3,2;0,1;4,1;0,3;1,2,4,2,4,2,1,2,0,4,3,0,3,0,0,4;1,1,77,3,4,34";
 		String grid3 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
 		String example="5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
 		String grid7 = "7,7;4;3,3;0,2;0,1,1,0,1,1,1,2,2,0,2,2,2,4,2,6,1,4;5,5,5,0;5,1,2,5,2,5,5,1;0,0,98,3,2,98,4,4,98,0,3,98,0,4,98,0,5,98,5,4,98";
 		String grid1 = "5,5;1;1,4;1,0;0,4;0,0,2,2;3,4,4,2,4,2,3,4;0,2,32,0,1,38";
-		String grid10 = "6,6;1;2,2;2,4;0,1,1,0,3,0,4,1,4,3,3,4,1,4,0,3,1,5;0,2;1,3,4,2,4,2,1,3;0,5,90,1,2,92,4,4,2,5,5,1,1,1,98";
-
-		//System.out.println(example);
-		//System.out.println("---------------------------------------------------------------");
-		System.out.println(solve(grid3,"BF",false));
-		//////System.out.println(m.stateSpace(m.initialState,NeoActions.TAKE_PILL));
-		//////System.out.println();
-		//////System.out.println("13,11;3;11,8;7,6;9,7,9,1,10,10,12,1;11,8,1,1;7,10,4,3,4,3,7,10,1,3,3,5,3,5,1,3,6,3,6,5,6,5,6,3,0,9,12,8,12,8,0,9,9,4,2,8,2,8,9,4,9,9,6,6,6,6,9,9,3,6,4,0,4,0,3,6,11,9,4,4,4,4,11,9,12,0,12,4,12,4,12,0,3,4,2,3,2,3,3,4,10,4,0,0,0,0,10,4,12,6,8,9,8,9,12,6,5,0,9,5,9,5,5,0,5,2,10,0,10,0,5,2,9,8,6,0,6,0,9,8,8,2,3,0,3,0,8,2,1,2,6,7,6,7,1,2,6,8,10,9,10,9,6,8,1,6,1,5,1,5,1,6,11,5,2,2,2,2,11,5,4,10,5,6,5,6,4,10,8,6,7,8,7,8,8,6,7,5,5,5,5,5,7,5,7,1,9,6,9,6,7,1,3,3,11,3,11,3,3,3,8,3,6,1,6,1,8,3,5,10,0,10,0,10,5,10,0,2,11,4,11,4,0,2,8,0,2,6,2,6,8,0,4,7,0,1,0,1,4,7,9,10,12,10,12,10,9,10,11,6,8,10,8,10,11,6,11,1,4,1,4,1,11,1,8,8,1,7,1,7,8,8,1,8,7,3,7,3,1,8,12,3,7,2,7,2,12,3,11,2,2,4,2,4,11,2,5,3,10,3,10,3,5,3,3,9,2,7,2,7,3,9,9,0,10,7,10,7,9,0,8,4,10,6,10,6,8,4,3,2,1,0,1,0,3,2,11,0,8,7,8,7,11,0,10,1,7,4,7,4,10,1,8,1,4,8,4,8,8,1,5,4,12,2,12,2,5,4,11,7,1,10,1,10,11,7,1,9,12,7,12,7,1,9,2,9,2,0,2,0,2,9,7,7,3,10,3,10,7,7,12,5,5,1,5,1,12,5,0,7,4,6,4,6,0,7,0,3,4,5,4,5,0,3,6,2,10,8,10,8,6,2,9,3,3,1,3,1,9,3,1,4,3,8,3,8,1,4,0,5,8,5,8,5,0,5;0,4,59,4,2,36,11,7,100;0,0,0;0");
-		//////System.out.println(m.stateSpace("13,11;3;11,8;7,6;9,7,9,1,10,10,12,1;11,8,1,1;7,10,4,3,4,3,7,10,1,3,3,5,3,5,1,3,6,3,6,5,6,5,6,3,0,9,12,8,12,8,0,9,9,4,2,8,2,8,9,4,9,9,6,6,6,6,9,9,3,6,4,0,4,0,3,6,11,9,4,4,4,4,11,9,12,0,12,4,12,4,12,0,3,4,2,3,2,3,3,4,10,4,0,0,0,0,10,4,12,6,8,9,8,9,12,6,5,0,9,5,9,5,5,0,5,2,10,0,10,0,5,2,9,8,6,0,6,0,9,8,8,2,3,0,3,0,8,2,1,2,6,7,6,7,1,2,6,8,10,9,10,9,6,8,1,6,1,5,1,5,1,6,11,5,2,2,2,2,11,5,4,10,5,6,5,6,4,10,8,6,7,8,7,8,8,6,7,5,5,5,5,5,7,5,7,1,9,6,9,6,7,1,3,3,11,3,11,3,3,3,8,3,6,1,6,1,8,3,5,10,0,10,0,10,5,10,0,2,11,4,11,4,0,2,8,0,2,6,2,6,8,0,4,7,0,1,0,1,4,7,9,10,12,10,12,10,9,10,11,6,8,10,8,10,11,6,11,1,4,1,4,1,11,1,8,8,1,7,1,7,8,8,1,8,7,3,7,3,1,8,12,3,7,2,7,2,12,3,11,2,2,4,2,4,11,2,5,3,10,3,10,3,5,3,3,9,2,7,2,7,3,9,9,0,10,7,10,7,9,0,8,4,10,6,10,6,8,4,3,2,1,0,1,0,3,2,11,0,8,7,8,7,11,0,10,1,7,4,7,4,10,1,8,1,4,8,4,8,8,1,5,4,12,2,12,2,5,4,11,7,1,10,1,10,11,7,1,9,12,7,12,7,1,9,2,9,2,0,2,0,2,9,7,7,3,10,3,10,7,7,12,5,5,1,5,1,12,5,0,7,4,6,4,6,0,7,0,3,4,5,4,5,0,3,6,2,10,8,10,8,6,2,9,3,3,1,3,1,9,3,1,4,3,8,3,8,1,4,0,5,8,5,8,5,0,5;0,4,59,4,2,36,11,7,100;0,0,0;0", NeoActions.KILL_UP));
+		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0,2;0,0,62,4,3,45,3,3,39,2,3,40";
+		//Matrix m=new Matrix(grid3);
+		////System.out.println(example);
+		////System.out.println("---------------------------------------------------------------");
+		System.out.println(solve(grid10,"DF",false));
+		////////System.out.println(m.stateSpace(m.initialState,NeoActions.TAKE_PILL));
+		////////System.out.println();
+		////////System.out.println("13,11;3;11,8;7,6;9,7,9,1,10,10,12,1;11,8,1,1;7,10,4,3,4,3,7,10,1,3,3,5,3,5,1,3,6,3,6,5,6,5,6,3,0,9,12,8,12,8,0,9,9,4,2,8,2,8,9,4,9,9,6,6,6,6,9,9,3,6,4,0,4,0,3,6,11,9,4,4,4,4,11,9,12,0,12,4,12,4,12,0,3,4,2,3,2,3,3,4,10,4,0,0,0,0,10,4,12,6,8,9,8,9,12,6,5,0,9,5,9,5,5,0,5,2,10,0,10,0,5,2,9,8,6,0,6,0,9,8,8,2,3,0,3,0,8,2,1,2,6,7,6,7,1,2,6,8,10,9,10,9,6,8,1,6,1,5,1,5,1,6,11,5,2,2,2,2,11,5,4,10,5,6,5,6,4,10,8,6,7,8,7,8,8,6,7,5,5,5,5,5,7,5,7,1,9,6,9,6,7,1,3,3,11,3,11,3,3,3,8,3,6,1,6,1,8,3,5,10,0,10,0,10,5,10,0,2,11,4,11,4,0,2,8,0,2,6,2,6,8,0,4,7,0,1,0,1,4,7,9,10,12,10,12,10,9,10,11,6,8,10,8,10,11,6,11,1,4,1,4,1,11,1,8,8,1,7,1,7,8,8,1,8,7,3,7,3,1,8,12,3,7,2,7,2,12,3,11,2,2,4,2,4,11,2,5,3,10,3,10,3,5,3,3,9,2,7,2,7,3,9,9,0,10,7,10,7,9,0,8,4,10,6,10,6,8,4,3,2,1,0,1,0,3,2,11,0,8,7,8,7,11,0,10,1,7,4,7,4,10,1,8,1,4,8,4,8,8,1,5,4,12,2,12,2,5,4,11,7,1,10,1,10,11,7,1,9,12,7,12,7,1,9,2,9,2,0,2,0,2,9,7,7,3,10,3,10,7,7,12,5,5,1,5,1,12,5,0,7,4,6,4,6,0,7,0,3,4,5,4,5,0,3,6,2,10,8,10,8,6,2,9,3,3,1,3,1,9,3,1,4,3,8,3,8,1,4,0,5,8,5,8,5,0,5;0,4,59,4,2,36,11,7,100;0,0,0;0");
+//		//System.out.println(m.stateSpace("5,5;1;0,2;4,4;2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,100,1,2,100,2,2,100,3,2,100,4,2,100,2,0,9;2,0,0,0,0,0;40", NeoActions.LEFT));
 	}
 	
 }
