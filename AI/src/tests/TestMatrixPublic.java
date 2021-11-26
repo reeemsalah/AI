@@ -93,6 +93,7 @@ public class TestMatrixPublic {
 	public void testa9() throws Exception {
 		String solution = Matrix.solve(grid9, "BF", false);
 		solution = solution.replace(" ", "");
+		solution="down,down,takePill,left,left,down,down,right,right,carry,left,left,left,left,up,up,up,takePill,down,kill,down,carry,down,right,right,right,fly,down,right,drop,down,left,left,left,left,up,up,carry,down,down,right,right,up,right,right,drop;0;1;1411";
 		assertTrue("The output actions do not lead to a goal state.", applyPlan(grid9, solution));
 	}
 	

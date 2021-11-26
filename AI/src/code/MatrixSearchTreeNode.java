@@ -13,7 +13,11 @@ public class MatrixSearchTreeNode extends SearchTreeNode implements Comparable{
 	@Override
 	public int compareTo(Object o) {
 		MatrixSearchTreeNode node =(MatrixSearchTreeNode)o;
-		return this.pathCost-node.pathCost;
+		int [] thisDeathsKills = Matrix.getTotalDeathsKills(this.state);
+		int [] nodeDeathsKills = Matrix.getTotalDeathsKills(node.state);
+		if (thisDeathsKills[0]==nodeDeathsKills[0])
+			return thisDeathsKills[1]-nodeDeathsKills[1];
+		return thisDeathsKills[0]-nodeDeathsKills[0];
 	}
 	@Override
 	public String toString()
