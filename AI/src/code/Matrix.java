@@ -416,12 +416,12 @@ public class Matrix extends SearchProblem {
 		parsedState[1] = "";//c
 		parsedState[3] = "";//TB
 		parsedState[6] = "";//pads
-		// String[]hostageList=parsedState[7].split(",");
-	    // String[]hostages=new String[hostageList.length/3];
-		// for(int i=0;i<hostages.length;i++) {
-		// 	hostages[i]=hostageList[i*3]+","+hostageList[i*3+1];
-		// }
-		// parsedState[7]=String.join(",", hostages);
+		String[]hostageList=parsedState[7].split(",");
+	    String[]hostages=new String[hostageList.length/3];
+		for(int i=0;i<hostages.length;i++) {
+			hostages[i]=hostageList[i*3]+","+hostageList[i*3+1];
+		}
+		parsedState[7]=String.join(",", hostages);
 		return String.join(";", parsedState);
 	}
 	
