@@ -6,4 +6,5 @@ public abstract class SearchTreeNode {
 	Operator operator;
 	int depth;
 	int pathCost;
+	int h;
 }
