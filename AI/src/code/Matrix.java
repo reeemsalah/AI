@@ -615,48 +615,36 @@ public class Matrix extends SearchProblem {
 	
 	public static String solve(String grid, String strategy, boolean visualize) {
 		Matrix m = new Matrix(grid);
-		String initialState=grid+";";
-		//adding a carry flag to each hostage
-		int hostageCount=grid.split(";")[7].split(",").length/3;
-		for(int i=0;i<hostageCount;i++) {
-			initialState+="0";
-			if(i<hostageCount-1)
-				initialState+=",";
-			else
-				initialState+=";";
-		}
-		//adding Neo's Damage
-		initialState+="0";//Neo's damage
 		MatrixSearchTreeNode solNode = null;
 		MatrixSearchTreeNode root ;
 		switch (strategy) {
 			case "BF":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,0);
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,0);
 				solNode = BFS(root, m);
 				break;
 			case "DF":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,0);
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,0);
 				solNode=DFS(root,m);
 				break;
 			case "ID":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,0);
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,0);
 				solNode=IDS(root,m);				
 				break;
 			case "UC":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,0);
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,0);
 				solNode=UCS(root,m);
 				break;
 			case "GR1":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,m.heuristic1(initialState));
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic1(m.initialState));
 				break;
 			case "GR2":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,m.heuristic2(initialState));
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
 				break;
 			case "AS1":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,m.heuristic1(initialState));
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic1(m.initialState));
 				break;
 			case "AS2":
-			root = new MatrixSearchTreeNode(initialState, null, null, 0, 0,m.heuristic2(initialState));
+			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
 				break;
 		}
 		//System.out.println(m.nodesExp);
@@ -664,7 +652,7 @@ public class Matrix extends SearchProblem {
 			return "No Solution";
 
 		String solve=getSolutionSequence(solNode);
-		solve+=getDeathsKills(initialState,solNode.state);
+		solve+=getDeathsKills(m.initialState,solNode.state);
 		solve+=m.nodesExp+"";
 		return(solve);
 	}
