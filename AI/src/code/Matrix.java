@@ -475,7 +475,7 @@ public class Matrix extends SearchProblem {
 
 	private  int heuristic1(String state) {
 		String[]parsedState=state.split(";");
-		int c=Integer.parseInt(parsedState[1]);
+//		int c=Integer.parseInt(parsedState[1]);
 		int currentC=Integer.parseInt(parsedState[10]);
 		int NeoR=Integer.parseInt(parsedState[2].split(",")[0]);
 		int NeoC=Integer.parseInt(parsedState[2].split(",")[1]);
@@ -488,19 +488,24 @@ public class Matrix extends SearchProblem {
 			hostages[i]=new Position(Integer.parseInt(hostageList[i*3]),Integer.parseInt(hostageList[i*3+1]));
 			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
 		}
-		String[]hostagesState=new String [hostages.length];
-		for(int i=0;i<parsedState[8].split(",").length;i++)
-			hostagesState[i]=parsedState[8].split(",")[i];
-		//ended parsing state
 		int h=0;
-		for(int i=0;i<hostages.length;i++){
-			if(hostages[i].x!=TeleX||hostages[i].y!=TeleY){
-				if(hostagesState[i].charAt(0)=='0'&&hostagesDamage[i]>99){
-					h+=getMinDist(NeoR,NeoC,hostages[i]);
-				}
-					
+		String[]hostagesState=new String [hostages.length];
+		for(int i=0;i<parsedState[8].split(",").length;i++) {
+			hostagesState[i]=parsedState[8].split(",")[i];
+			if( (hostages[i].x!=TeleX||hostages[i].y!=TeleY) && (hostages[i].x!=NeoR||hostages[i].y!=NeoC) && (hostagesDamage[i]>99) ){
+				h+=r*c;
 			}
 		}
+		//ended parsing state
+		
+//		for(int i=0;i<hostages.length;i++){
+//			if( (hostages[i].x!=TeleX||hostages[i].y!=TeleY) && (hostages[i].x!=NeoR||hostages[i].y!=NeoC) && (hostagesState[i].charAt(0)!='2') ){
+//				{
+//					
+//				}
+//			}
+//		}
+//		h+=getMinDist(NeoR,NeoC,new Position(TeleX,TeleY));
 		return h;
 	}
 
@@ -510,8 +515,22 @@ public class Matrix extends SearchProblem {
 	}
 
 	private  int getMinDist(int neoR, int neoC, Position hostage) {
-		int dist1=neoR-hostage.x+neoC-hostage.y;
-		return 0;
+		int dist1=Math.abs( neoR-hostage.x)+Math.abs(neoC-hostage.y);
+		int min=dist1;
+		for(int i=0;i<startPads.length;i++)
+		{
+			int startPadX=startPads[i].x;
+			int startPadY=startPads[i].y;
+			int endPadX=endPads[i].x;
+			int endPadY=endPads[i].y;
+			int distTemp1 = Math.abs( neoR-startPadX)+Math.abs(neoC-startPadY);
+			int distTemp2 = Math.abs( hostage.x-endPadX)+Math.abs(hostage.y-endPadY);
+			int totalDist= distTemp1+distTemp2;
+			if(totalDist<min)
+				min=totalDist;
+		}
+		
+		return min;
 	}
 
 	private static boolean allowExpandAction(Operator parent, Operator child){
@@ -638,12 +657,14 @@ public class Matrix extends SearchProblem {
 				break;
 			case "GR1":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic1(m.initialState));
+			solNode=GR1(root,m);
 				break;
 			case "GR2":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
 				break;
 			case "AS1":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic1(m.initialState));
+			solNode=AS1(root,m);
 				break;
 			case "AS2":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
@@ -659,6 +680,50 @@ public class Matrix extends SearchProblem {
 		return(solve);
 	}
 	
+	private static MatrixSearchTreeNode AS1(MatrixSearchTreeNode root, Matrix m) {
+		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
+		List<NeoActions> operators = Arrays.asList(NeoActions.values());
+		queue.add(root);
+		do{
+			MatrixSearchTreeNode node = queue.remove();
+//			//System.out.println(node);
+			m.nodesExp++;
+			if(m.goalTest(node.state))
+				return node;
+			for(Operator o : operators){
+				MatrixSearchTreeNode newNode = m.expand(node, o,"AS1");
+				if (newNode != null)
+					queue.add(newNode);
+			}
+//			printQueue(queue);
+
+			////System.out.println(m.nodesExp);
+		}
+		while(!queue.isEmpty());
+		return null;
+	}
+	private static MatrixSearchTreeNode GR1(MatrixSearchTreeNode root, Matrix m) {
+		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
+		List<NeoActions> operators = Arrays.asList(NeoActions.values());
+		queue.add(root);
+		do{
+			MatrixSearchTreeNode node = queue.remove();
+//			//System.out.println(node);
+			m.nodesExp++;
+			if(m.goalTest(node.state))
+				return node;
+			for(Operator o : operators){
+				MatrixSearchTreeNode newNode = m.expand(node, o,"GR1");
+				if (newNode != null)
+					queue.add(newNode);
+			}
+//			printQueue(queue);
+
+			////System.out.println(m.nodesExp);
+		}
+		while(!queue.isEmpty());
+		return null;
+	}
 	private static MatrixSearchTreeNode UCS(MatrixSearchTreeNode root, Matrix m) {
 		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
 		List<NeoActions> operators = Arrays.asList(NeoActions.values());
@@ -725,12 +790,13 @@ public class Matrix extends SearchProblem {
 
 	private static String getSolutionSequence(MatrixSearchTreeNode solNode) {
 		MatrixSearchTreeNode curNode=solNode;
-		// System.out.println(curNode.state);
+//		 System.out.println(curNode.state);
+//		 System.out.println(curNode.h+curNode.pathCost);
 		String path=((NeoActions)curNode.operator).name().toLowerCase()+";";
 		curNode=(MatrixSearchTreeNode) curNode.parent;
 		while(curNode!=null) {
-			// System.out.println(curNode.state);
-			// System.out.println(curNode.operator);
+//			 System.out.println(curNode.state);
+//			 System.out.println(curNode.pathCost+" "+curNode.h);
 			if(curNode.parent!=null)
 				if((NeoActions)curNode.operator == NeoActions.TAKEPILL)
 					path="takePill"+","+path;
@@ -821,24 +887,19 @@ public class Matrix extends SearchProblem {
 	}
 	public static void main(String[] args) {
 		String g=genGrid();
-		String grid0 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
-		String gSmall="3,3;2;0,0;2,2;1,1;1,0;0,2,2,0,2,0,0,2;1,2,20";
+		String grid0 = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
+		String grid1 = "5,5;1;1,4;1,0;0,4;0,0,2,2;3,4,4,2,4,2,3,4;0,2,32,0,1,38";
 		String grid2 = "5,5;2;3,2;0,1;4,1;0,3;1,2,4,2,4,2,1,2,0,4,3,0,3,0,0,4;1,1,77,3,4,34";
 		String grid3 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
-		String example="5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-		String grid7 = "7,7;4;3,3;0,2;0,1,1,0,1,1,1,2,2,0,2,2,2,4,2,6,1,4;5,5,5,0;5,1,2,5,2,5,5,1;0,0,98,3,2,98,4,4,98,0,3,98,0,4,98,0,5,98,5,4,98";
-		String grid1 = "5,5;1;1,4;1,0;0,4;0,0,2,2;3,4,4,2,4,2,3,4;0,2,32,0,1,38";
-		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0,2;0,0,62,4,3,45,3,3,39,2,3,40";
+		String grid4 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,98,1,0,98";
+		String grid5 = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
 		String grid6 = "5,5;2;3,0;4,3;2,1,2,2,3,1,0,0,1,1,4,2,3,3,1,3,0,1;2,4,3,2,3,4,0,4;4,4,4,0,4,0,4,4;1,4,57,2,0,46";
+		String grid7 = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
+		String grid8 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
 		String grid9 = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-		//Matrix m=new Matrix(grid3);
-		////System.out.println(example);
-		////System.out.println("---------------------------------------------------------------");
-		System.out.println(solve(grid9,"UC",false));
-		////////System.out.println(m.stateSpace(m.initialState,NeoActions.TAKE_PILL));
-		////////System.out.println();
-		////////System.out.println("13,11;3;11,8;7,6;9,7,9,1,10,10,12,1;11,8,1,1;7,10,4,3,4,3,7,10,1,3,3,5,3,5,1,3,6,3,6,5,6,5,6,3,0,9,12,8,12,8,0,9,9,4,2,8,2,8,9,4,9,9,6,6,6,6,9,9,3,6,4,0,4,0,3,6,11,9,4,4,4,4,11,9,12,0,12,4,12,4,12,0,3,4,2,3,2,3,3,4,10,4,0,0,0,0,10,4,12,6,8,9,8,9,12,6,5,0,9,5,9,5,5,0,5,2,10,0,10,0,5,2,9,8,6,0,6,0,9,8,8,2,3,0,3,0,8,2,1,2,6,7,6,7,1,2,6,8,10,9,10,9,6,8,1,6,1,5,1,5,1,6,11,5,2,2,2,2,11,5,4,10,5,6,5,6,4,10,8,6,7,8,7,8,8,6,7,5,5,5,5,5,7,5,7,1,9,6,9,6,7,1,3,3,11,3,11,3,3,3,8,3,6,1,6,1,8,3,5,10,0,10,0,10,5,10,0,2,11,4,11,4,0,2,8,0,2,6,2,6,8,0,4,7,0,1,0,1,4,7,9,10,12,10,12,10,9,10,11,6,8,10,8,10,11,6,11,1,4,1,4,1,11,1,8,8,1,7,1,7,8,8,1,8,7,3,7,3,1,8,12,3,7,2,7,2,12,3,11,2,2,4,2,4,11,2,5,3,10,3,10,3,5,3,3,9,2,7,2,7,3,9,9,0,10,7,10,7,9,0,8,4,10,6,10,6,8,4,3,2,1,0,1,0,3,2,11,0,8,7,8,7,11,0,10,1,7,4,7,4,10,1,8,1,4,8,4,8,8,1,5,4,12,2,12,2,5,4,11,7,1,10,1,10,11,7,1,9,12,7,12,7,1,9,2,9,2,0,2,0,2,9,7,7,3,10,3,10,7,7,12,5,5,1,5,1,12,5,0,7,4,6,4,6,0,7,0,3,4,5,4,5,0,3,6,2,10,8,10,8,6,2,9,3,3,1,3,1,9,3,1,4,3,8,3,8,1,4,0,5,8,5,8,5,0,5;0,4,59,4,2,36,11,7,100;0,0,0;0");
-//		//System.out.println(m.stateSpace("5,5;1;0,2;4,4;2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,100,1,2,100,2,2,100,3,2,100,4,2,100,2,0,9;2,0,0,0,0,0;40", NeoActions.LEFT));
+		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
+		System.out.println(solve(grid10,"UC",false));
+		System.out.println(solve(grid10,"AS1",false));
 	}
 	
 }
