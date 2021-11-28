@@ -14,8 +14,8 @@ public class Matrix extends SearchProblem {
 	int r;
 	int c;
 	HashSet<String>generatedStates;
-	String [] startPads;
-	String [] endPads;
+	Position[] startPads;
+	Position[] endPads;
 	static String stat_initialState;
 
 	Matrix(String grid) {
@@ -27,11 +27,13 @@ public class Matrix extends SearchProblem {
 		r=Integer.parseInt(parsedState[0].split(",")[0]);
 		c=Integer.parseInt(parsedState[0].split(",")[1]);
 		String[] padList=parsedState[6].split(",");	
-		startPads= new String[padList.length/4];
-		endPads=new String[padList.length/4];
+		startPads = new Position[padList.length/4];
+		endPads = new Position[padList.length/4];
 		for(int i=0;i<startPads.length;i++) {
-			startPads[i]=padList[i*4]+","+padList[i*4+1];
-			endPads[i]=padList[i*4+2]+","+padList[i*4+3];			
+			startPads[i]=new Position(Integer.parseInt(padList[i*4]),Integer.parseInt(padList[i*4+1]));
+			endPads[i]=new Position(Integer.parseInt(padList[i*4+2]),Integer.parseInt(padList[i*4+3]));
+			// startPads[i]=padList[i*4]+","+padList[i*4+1];
+			// endPads[i]=padList[i*4+2]+","+padList[i*4+3];			
 		}
 		generatedStates = new HashSet<String>();
 		// existAgent=false;
@@ -101,8 +103,8 @@ public class Matrix extends SearchProblem {
 		int currentC=Integer.parseInt(parsedState[10]);
 		Position[]agents=null;
 		Position[]pills=null;
-		Position[]startPads=null;
-		Position[]endPads=null;
+		// Position[]startPads=null;
+		// Position[]endPads=null;
 		String[]hostageList=parsedState[7].split(",");
 	    Position[]hostages=new Position[hostageList.length/3];
 	    int[]hostagesDamage=new int[hostageList.length/3];
@@ -199,15 +201,15 @@ public class Matrix extends SearchProblem {
 			}
 			break;
 		case FLY:
-			String[] padList=parsedState[6].split(",");	
-			startPads=new Position[padList.length/4];
-			endPads=new Position[padList.length/4];
-			for(int i=0;i<startPads.length;i++) {
-				startPads[i]=new Position(Integer.parseInt(padList[i*4]),Integer.parseInt(padList[i*4+1]));
-				////////System.out.println("start pad "+i+" "+startPads[i]);
-				endPads[i]=new Position(Integer.parseInt(padList[i*4+2]),Integer.parseInt(padList[i*4+3]));
-				////////System.out.println("end pad "+i+" "+endPads[i]);
-			}
+			// String[] padList=parsedState[6].split(",");	
+			// startPads=new Position[padList.length/4];
+			// endPads=new Position[padList.length/4];
+			// for(int i=0;i<startPads.length;i++) {
+			// 	startPads[i]=new Position(Integer.parseInt(padList[i*4]),Integer.parseInt(padList[i*4+1]));
+			// 	////////System.out.println("start pad "+i+" "+startPads[i]);
+			// 	endPads[i]=new Position(Integer.parseInt(padList[i*4+2]),Integer.parseInt(padList[i*4+3]));
+			// 	////////System.out.println("end pad "+i+" "+endPads[i]);
+			// }
 			int endPadIndex = getIndex(NeoR,NeoC,startPads);
 			if (endPadIndex >-1) {
 				NeoR = endPads[endPadIndex].x;
