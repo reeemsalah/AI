@@ -7,6 +7,6 @@ public abstract class SearchProblem {
 	String initialState;
 	public abstract String stateSpace(String state,Operator o);
 	public abstract boolean goalTest(String state);
-	public abstract int pathCost(String state);
+	public abstract int pathCost(String state,int depth);
 
 }
