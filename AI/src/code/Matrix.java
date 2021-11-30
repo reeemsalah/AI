@@ -11,8 +11,11 @@ import java.util.Stack;
 public class Matrix extends SearchProblem {
 	String grid;
 	int nodesExp;
-	int r;
+	int rows;
+	int columns;
 	int c;
+	int TeleX;
+	int TeleY;
 	HashSet<String>generatedStates;
 	Position[] startPads;
 	Position[] endPads;
@@ -24,8 +27,11 @@ public class Matrix extends SearchProblem {
 		this.initialState=this.grid+";";
 		String[]parsedState=grid.split(";");
 		nodesExp=0;
-		r=Integer.parseInt(parsedState[0].split(",")[0]);
-		c=Integer.parseInt(parsedState[0].split(",")[1]);
+		this.rows=Integer.parseInt(parsedState[0].split(",")[0]);
+		this.columns=Integer.parseInt(parsedState[0].split(",")[1]);
+		this.c = Integer.parseInt(parsedState[1]);
+		this.TeleX=Integer.parseInt(parsedState[3].split(",")[0]);
+		this.TeleY=Integer.parseInt(parsedState[3].split(",")[1]);
 		String[] padList=parsedState[6].split(",");	
 		startPads = new Position[padList.length/4];
 		endPads = new Position[padList.length/4];
@@ -85,7 +91,7 @@ public class Matrix extends SearchProblem {
 	@Override
 	public int pathCost(String state, int depth) {
 		int [] thisDeathsKills = Matrix.getTotalDeathsKills(state);
-		return thisDeathsKills[0]*r*c*(weight+1) + thisDeathsKills[1]*weight+depth;
+		return thisDeathsKills[0]*rows*columns*(weight+1) + thisDeathsKills[1]*weight+depth;
 	}
 	
 	@Override
@@ -93,13 +99,13 @@ public class Matrix extends SearchProblem {
 		//parse the state
 		String[]parsedState=state.split(";");
 		String []nextParsedState=parsedState.clone();
-		int rows=Integer.parseInt(parsedState[0].split(",")[0]);
-		int columns=Integer.parseInt(parsedState[0].split(",")[1]);
-		int c=Integer.parseInt(parsedState[1]);
+		// int rows=Integer.parseInt(parsedState[0].split(",")[0]);
+		// int columns=Integer.parseInt(parsedState[0].split(",")[1]);
+		// int c=Integer.parseInt(parsedState[1]);
 		int NeoR=Integer.parseInt(parsedState[2].split(",")[0]);
 		int NeoC=Integer.parseInt(parsedState[2].split(",")[1]);
-		int TeleX=Integer.parseInt(parsedState[3].split(",")[0]);
-		int TeleY=Integer.parseInt(parsedState[3].split(",")[1]);
+		// int TeleX=Integer.parseInt(parsedState[3].split(",")[0]);
+		// int TeleY=Integer.parseInt(parsedState[3].split(",")[1]);
 		int currentC=Integer.parseInt(parsedState[10]);
 		Position[]agents=null;
 		Position[]pills=null;
@@ -490,9 +496,9 @@ public class Matrix extends SearchProblem {
 		String[]hostagesState=new String [hostages.length];
 		for(int i=0;i<parsedState[8].split(",").length;i++) {
 			hostagesState[i]=parsedState[8].split(",")[i];
-			if( (hostages[i].x!=TeleX||hostages[i].y!=TeleY) && (hostages[i].x!=NeoR||hostages[i].y!=NeoC) && (hostagesDamage[i]>99) )
+			if( (hostages[i].x!=TeleX||hostages[i].y!=TeleY) && (hostages[i].x!=NeoR||hostages[i].y!=NeoC) && (hostagesDamage[i]>99  && hostagesState[i].charAt(0)!='2') )
 			{
-				h+=(r*c)*(weight+1)+weight;
+				h+=(rows*columns)*(weight+1)+weight;
 			}
 			if( (hostages[i].x!=TeleX||hostages[i].y!=TeleY) && (hostages[i].x!=NeoR||hostages[i].y!=NeoC) && (hostagesState[i].charAt(0)!='2'))
 			{
@@ -505,8 +511,39 @@ public class Matrix extends SearchProblem {
 	}
 
 
-	private  int heuristic2(String nextState) {
-		return 0;
+	private  int heuristic2(String state) {
+		int h = 0;
+		String[]parsedState=state.split(";");
+		int NeoR=Integer.parseInt(parsedState[2].split(",")[0]);
+		int NeoC=Integer.parseInt(parsedState[2].split(",")[1]);
+		int TeleX=Integer.parseInt(parsedState[3].split(",")[0]);
+		int TeleY=Integer.parseInt(parsedState[3].split(",")[1]);
+		String[]hostageList=parsedState[7].split(",");
+	    Position[]hostages=new Position[hostageList.length/3];
+	    int[]hostagesDamage=new int[hostageList.length/3];
+		for(int i=0;i<hostages.length;i++) {
+			hostages[i]=new Position(Integer.parseInt(hostageList[i*3]),Integer.parseInt(hostageList[i*3+1]));
+			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
+		}
+		String[]hostagesState=new String [hostages.length];
+		// int minDist = 
+		// Position minDistHostage = null;
+		// for(int i=0;i<parsedState[8].split(",").length;i++) {
+		// 	hostagesState[i]=parsedState[8].split(",")[i];
+		// 	if(hostagesState[i].charAt(0)!='2'){
+		// 		if (getMinDist(TeleX, TeleY, hostages[i])<)
+		// 	}
+
+		// }
+		for(int i=0;i<parsedState[8].split(",").length;i++) {
+			hostagesState[i]=parsedState[8].split(",")[i];
+			if((hostages[i].x!=TeleX||hostages[i].y!=TeleY) && hostagesState[i].charAt(0)=='0')
+			{
+				h+=weight;
+			}
+		}
+
+		return h;
 	}
 
 	private  int getMinDist(int neoR, int neoC, Position hostage) {
@@ -656,6 +693,7 @@ public class Matrix extends SearchProblem {
 				break;
 			case "GR2":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
+			solNode=GR2(root,m);
 				break;
 			case "AS1":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic1(m.initialState));
@@ -663,18 +701,63 @@ public class Matrix extends SearchProblem {
 				break;
 			case "AS2":
 			root = new MatrixSearchTreeNode(m.initialState, null, null, 0, 0,m.heuristic2(m.initialState));
+			solNode=AS2(root,m);
 				break;
 		}
 		//System.out.println(m.nodesExp);
 		if(solNode==null)
 			return "No Solution";
 
-		String solve=getSolutionSequence(solNode);
+		String solve=m.getSolutionSequence(solNode, visualize);
 		solve+=getDeathsKills(m.initialState,solNode.state);
 		solve+=m.nodesExp+"";
 		return(solve);
 	}
 	
+	private static MatrixSearchTreeNode AS2(MatrixSearchTreeNode root, Matrix m) {
+		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
+		List<NeoActions> operators = Arrays.asList(NeoActions.values());
+		queue.add(root);
+		do{
+			MatrixSearchTreeNode node = queue.remove();
+//			//System.out.println(node);
+			m.nodesExp++;
+			if(m.goalTest(node.state))
+				return node;
+			for(Operator o : operators){
+				MatrixSearchTreeNode newNode = m.expand(node, o,"AS2");
+				if (newNode != null)
+					queue.add(newNode);
+			}
+//			printQueue(queue);
+
+			////System.out.println(m.nodesExp);
+		}
+		while(!queue.isEmpty());
+		return null;
+	}
+	private static MatrixSearchTreeNode GR2(MatrixSearchTreeNode root, Matrix m) {
+		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
+		List<NeoActions> operators = Arrays.asList(NeoActions.values());
+		queue.add(root);
+		do{
+			MatrixSearchTreeNode node = queue.remove();
+//			//System.out.println(node);
+			m.nodesExp++;
+			if(m.goalTest(node.state))
+				return node;
+			for(Operator o : operators){
+				MatrixSearchTreeNode newNode = m.expand(node, o,"GR2");
+				if (newNode != null)
+					queue.add(newNode);
+			}
+//			printQueue(queue);
+
+			////System.out.println(m.nodesExp);
+		}
+		while(!queue.isEmpty());
+		return null;
+	}
 	private static MatrixSearchTreeNode AS1(MatrixSearchTreeNode root, Matrix m) {
 		PriorityQueue<MatrixSearchTreeNode> queue = new PriorityQueue<MatrixSearchTreeNode>();
 		List<NeoActions> operators = Arrays.asList(NeoActions.values());
@@ -783,24 +866,106 @@ public class Matrix extends SearchProblem {
 		return result;
 	}
 
-	private static String getSolutionSequence(MatrixSearchTreeNode solNode) {
+	private String getSolutionSequence(MatrixSearchTreeNode solNode, boolean visualize) {
 		MatrixSearchTreeNode curNode=solNode;
-//		 System.out.println(curNode.state);
-//		 System.out.println(curNode.pathCost+" "+curNode.h);
-		String path=((NeoActions)curNode.operator).name().toLowerCase()+";";
-		curNode=(MatrixSearchTreeNode) curNode.parent;
+		//  System.out.println("heuristic of goal "+curNode.h);
+		//  System.out.println(curNode.pathCost+" "+curNode.h);
+		String path="";
 		while(curNode!=null) {
 //			 System.out.println(curNode.state);
 //			 System.out.println(curNode.pathCost+" "+curNode.h);
+			if (visualize)
+				visualizeState(curNode.state); 
 			if(curNode.parent!=null)
 				if((NeoActions)curNode.operator == NeoActions.TAKEPILL)
 					path="takePill"+","+path;
 				else
 					path=((NeoActions)curNode.operator).name().toLowerCase()+","+path;
 			curNode=(MatrixSearchTreeNode) curNode.parent;
-			
 		}
 		return path;
+	}
+	private void visualizeState(String state) {
+		//parse the state
+		String[][] gridView = new String[rows][columns];
+		String[]parsedState=state.split(";");
+		// int rows=Integer.parseInt(parsedState[0].split(",")[0]);
+		// int columns=Integer.parseInt(parsedState[0].split(",")[1]);
+		// int c=Integer.parseInt(parsedState[1]);
+		int NeoR=Integer.parseInt(parsedState[2].split(",")[0]);
+		int NeoC=Integer.parseInt(parsedState[2].split(",")[1]);
+		// int TeleX=Integer.parseInt(parsedState[3].split(",")[0]);
+		// int TeleY=Integer.parseInt(parsedState[3].split(",")[1]);
+		// int currentC=Integer.parseInt(parsedState[10]);
+		// Position[]agents=null;
+		// Position[]pills=null;
+		// Position[]startPads=null;
+		// Position[]endPads=null;
+		gridView[NeoR][NeoC] = "|   Neo   |";
+		gridView[TeleX][TeleY] = "|    TB   |";
+
+		String[] agentList=parsedState[4].split(",");
+		Position[] agents=new Position[agentList.length/2];
+		for(int i=0;i<agents.length;i++) {
+			agents[i]=new Position(Integer.parseInt(agentList[i*2]),Integer.parseInt(agentList[i*2+1]));
+			gridView[agents[i].x][agents[i].y] = "|    A    |";
+			////////System.out.println("agent "+i+" "+agents[i]);
+		}
+		String[] pillList=parsedState[5].split(",");	
+		Position[] pills=new Position[pillList.length/2];
+		for(int i=0;i<pills.length;i++) {
+			pills[i]=new Position(Integer.parseInt(pillList[i*2]),Integer.parseInt(pillList[i*2+1]));
+			gridView[pills[i].x][pills[i].y] = "|    P    |";
+		}
+		String[]hostageList=parsedState[7].split(",");
+	    Position[]hostages=new Position[hostageList.length/3];
+	    int[]hostagesDamage=new int[hostageList.length/3];
+		for(int i=0;i<hostages.length;i++) {
+			hostages[i]=new Position(Integer.parseInt(hostageList[i*3]),Integer.parseInt(hostageList[i*3+1]));
+			////////System.out.println("Hostage: "+i+" "+hostages[i]);
+			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
+			gridView[hostages[i].x][hostages[i].y] = "|   H("+hostagesDamage[i]+")  |";
+			////////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
+		}
+		for(int i=0;i<startPads.length;i=i+2) {
+			gridView[startPads[i].x][startPads[i].y] = "|Pad ("+startPads[i+1].x+","+startPads[i+1].y+")|";
+			gridView[startPads[i+1].x][startPads[i+1].y] = "|Pad ("+startPads[i].x+","+startPads[i].y+")|";
+			// startPads[i]=padList[i*4]+","+padList[i*4+1];
+			// endPads[i]=padList[i*4+2]+","+padList[i*4+3];			
+		}
+		int width = columns*11+4;
+		for(int i =-1;i<columns;i++)
+		{	
+			if (i==-1)
+				System.out.print("   ");
+			else
+				System.out.print("     "+i+"     ");
+		}
+		System.out.println();
+		for(int i=0;i<rows;i++)
+		{
+			System.out.print(i+": ");
+			for(int j=0;j<columns;j++)
+			{	
+				if (gridView[i][j]==null)
+					System.out.print("|         |");
+				else
+					System.out.print(gridView[i][j]);
+			}
+			System.out.println();
+			
+			for (int k=0;k<width;k++)
+				System.out.print("-");
+			System.out.println();
+		}
+		System.out.println();
+		for (int k=0;k<width;k++)
+			System.out.print("*");
+		System.out.println();
+		for (int k=0;k<width;k++)
+			System.out.print("*");
+		System.out.println();
+		System.out.println();
 	}
 	private static MatrixSearchTreeNode BFS(MatrixSearchTreeNode root, Matrix m) {
 		Queue<MatrixSearchTreeNode> queue = new LinkedList<MatrixSearchTreeNode>();
@@ -893,8 +1058,8 @@ public class Matrix extends SearchProblem {
 		String grid8 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
 		String grid9 = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
 		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
-		System.out.println(solve(grid9,"UC",false));
-		System.out.println(solve(grid9,"AS1",false));
+		// System.out.println(solve(grid3,"UC",false));
+		System.out.println(solve(grid3,"AS1",true));
 	}
 	
 }
