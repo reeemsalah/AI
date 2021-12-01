@@ -1,7 +1,7 @@
 package code;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryMXBean;
+// import java.lang.management.ManagementFactory;
+// import java.lang.management.MemoryMXBean;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -1057,103 +1057,103 @@ public class Matrix extends SearchProblem {
 		return null;
 	}
 	
-	public static void main(String[] args) {
-//		String g=genGrid();
+// 	public static void main(String[] args) {
+// //		String g=genGrid();
 		
-		/**
-		 * left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop;0;1;348758left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop
-		 */
-//		String grid0 = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
-//		String grid1 = "5,5;1;1,4;1,0;0,4;0,0,2,2;3,4,4,2,4,2,3,4;0,2,32,0,1,38";
-//		String grid2 = "5,5;2;3,2;0,1;4,1;0,3;1,2,4,2,4,2,1,2,0,4,3,0,3,0,0,4;1,1,77,3,4,34";
-		String grid3 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
-//		String grid4 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,98,1,0,98";
-//		String grid5 = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
-//		String grid6 = "5,5;2;3,0;4,3;2,1,2,2,3,1,0,0,1,1,4,2,3,3,1,3,0,1;2,4,3,2,3,4,0,4;4,4,4,0,4,0,4,4;1,4,57,2,0,46";
-//		String grid7 = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
-//		String grid8 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
-//		String grid9 = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
-		System.out.println(solve(grid10,"AS1",true));
-		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+// 		/**
+// 		 * left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop;0;1;348758left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop
+// 		 */
+// //		String grid0 = "5,5;2;3,4;1,2;0,3,1,4;2,3;4,4,0,2,0,2,4,4;2,2,91,2,4,62";
+// //		String grid1 = "5,5;1;1,4;1,0;0,4;0,0,2,2;3,4,4,2,4,2,3,4;0,2,32,0,1,38";
+// //		String grid2 = "5,5;2;3,2;0,1;4,1;0,3;1,2,4,2,4,2,1,2,0,4,3,0,3,0,0,4;1,1,77,3,4,34";
+// 		String grid3 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,1";
+// //		String grid4 = "5,5;1;0,4;4,4;0,3,1,4,2,1,3,0,4,1;4,0;2,4,3,4,3,4,2,4;0,2,98,1,2,98,2,2,98,3,2,98,4,2,98,2,0,98,1,0,98";
+// //		String grid5 = "5,5;2;0,4;3,4;3,1,1,1;2,3;3,0,0,1,0,1,3,0;4,2,54,4,0,85,1,0,43";
+// //		String grid6 = "5,5;2;3,0;4,3;2,1,2,2,3,1,0,0,1,1,4,2,3,3,1,3,0,1;2,4,3,2,3,4,0,4;4,4,4,0,4,0,4,4;1,4,57,2,0,46";
+// //		String grid7 = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
+// //		String grid8 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
+// //		String grid9 = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
+// 		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
+// 		System.out.println(solve(grid10,"AS1",true));
+// 		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
 
-		System.out.println(String.format("Initial memory: %.2f GB",(double)memoryMXBean.getHeapMemoryUsage().getInit() /1073741824));
+// 		System.out.println(String.format("Initial memory: %.2f GB",(double)memoryMXBean.getHeapMemoryUsage().getInit() /1073741824));
 
-		System.out.println(String.format("Used heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getUsed() /1073741824));
+// 		System.out.println(String.format("Used heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getUsed() /1073741824));
 
-		System.out.println(String.format("Max heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getMax() /1073741824));
+// 		System.out.println(String.format("Max heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getMax() /1073741824));
 
-		System.out.println(String.format("Committed memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getCommitted() /1073741824));
-//		System.out.println(solve(grid3,"AS2",true));
-//		System.out.println(m.goalTest("5,5;4;4,1;4,1;2,4,0,4,3,2,3,0,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;4,1,94,4,1,77,4,1,71,4,1,72;0,0,0,0;20;0;"));
-//		String initState="5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
-//		Matrix m = new Matrix(initState);
-//		initState=m.initialState;
-//
-//		String planString="left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop;0;1;348758";
-//		String[] planList =planString.split(",");
-//		for(String step : planList)
-//		{
-//			switch (step) {
-//			case "up":
-//				System.out.println("UP");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.UP);
-//				System.out.println(initState);
-//				break;
-//			case "down":
-//				System.out.println("DOWN");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.DOWN);
-//				System.out.println(initState);				break;
-//			case "right":
-//				System.out.println("RIGHT");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.RIGHT);
-//				System.out.println(initState);				break;
-//			case "left":
-//				System.out.println("LEFT");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.LEFT);
-//				System.out.println(initState);				break;
-//			case "carry":
-//				System.out.println("CARRY");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.CARRY);
-//				System.out.println(initState);				break;
-//			case "drop":
-//				System.out.println("DROP");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.DROP);
-//				System.out.println(initState);				break;
-//			case "fly":
-//				System.out.println("FLY");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.FLY);
-//				System.out.println(initState);				break;
-//			case "takePill":
-//				System.out.println("TAKEPILL");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.TAKEPILL);
-//				System.out.println(initState);				break;
-//			case "kill":
-//				System.out.println("KILL");
-//				System.out.println(initState);
-//
-//				initState=m.stateSpace(initState, NeoActions.KILL);
-//				System.out.println(initState);				break;
-//		}
-//		
-//		
-//	}
+// 		System.out.println(String.format("Committed memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getCommitted() /1073741824));
+// //		System.out.println(solve(grid3,"AS2",true));
+// //		System.out.println(m.goalTest("5,5;4;4,1;4,1;2,4,0,4,3,2,3,0,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;4,1,94,4,1,77,4,1,71,4,1,72;0,0,0,0;20;0;"));
+// //		String initState="5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
+// //		Matrix m = new Matrix(initState);
+// //		initState=m.initialState;
+// //
+// //		String planString="left,up,carry,down,right,right,down,right,carry,down,carry,down,carry,kill,left,left,drop;0;1;348758";
+// //		String[] planList =planString.split(",");
+// //		for(String step : planList)
+// //		{
+// //			switch (step) {
+// //			case "up":
+// //				System.out.println("UP");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.UP);
+// //				System.out.println(initState);
+// //				break;
+// //			case "down":
+// //				System.out.println("DOWN");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.DOWN);
+// //				System.out.println(initState);				break;
+// //			case "right":
+// //				System.out.println("RIGHT");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.RIGHT);
+// //				System.out.println(initState);				break;
+// //			case "left":
+// //				System.out.println("LEFT");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.LEFT);
+// //				System.out.println(initState);				break;
+// //			case "carry":
+// //				System.out.println("CARRY");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.CARRY);
+// //				System.out.println(initState);				break;
+// //			case "drop":
+// //				System.out.println("DROP");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.DROP);
+// //				System.out.println(initState);				break;
+// //			case "fly":
+// //				System.out.println("FLY");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.FLY);
+// //				System.out.println(initState);				break;
+// //			case "takePill":
+// //				System.out.println("TAKEPILL");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.TAKEPILL);
+// //				System.out.println(initState);				break;
+// //			case "kill":
+// //				System.out.println("KILL");
+// //				System.out.println(initState);
+// //
+// //				initState=m.stateSpace(initState, NeoActions.KILL);
+// //				System.out.println(initState);				break;
+// //		}
+// //		
+// //		
+// //	}
 	
-}
+// }
 }
