@@ -1,5 +1,7 @@
 package code;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -893,7 +895,7 @@ public class Matrix extends SearchProblem {
 					path=((NeoActions)curNode.operator).name().toLowerCase()+","+path;
 			curNode=(MatrixSearchTreeNode) curNode.parent;
 		}
-		return path.substring(0,path.length())+";";
+		return path.substring(0,path.length()-1)+";";
 	}
 	private void visualizeState(String state) {
 		//parse the state
@@ -911,8 +913,7 @@ public class Matrix extends SearchProblem {
 		// Position[]pills=null;
 		// Position[]startPads=null;
 		// Position[]endPads=null;
-		gridView[NeoR][NeoC] = "|   Neo   |";
-		gridView[TeleX][TeleY] = "|    TB   |";
+		
 
 		String[] agentList=parsedState[4].split(",");
 		Position[] agents=new Position[agentList.length/2];
@@ -938,9 +939,9 @@ public class Matrix extends SearchProblem {
 			////////System.out.println("Hostage: "+i+" "+hostages[i]);
 			hostagesDamage[i]=Integer.parseInt(hostageList[i*3+2]);
 			if(hostagesState[i].charAt(0)=='2')
-				gridView[hostages[i].x][hostages[i].y] = "|XXXH("+hostagesDamage[i]+")XXX|";
+				gridView[hostages[i].x][hostages[i].y] = "|XXXH("+hostagesDamage[i]+")XX|";
 			else
-				gridView[hostages[i].x][hostages[i].y] = "|   H("+hostagesDamage[i]+")   |";
+				gridView[hostages[i].x][hostages[i].y] = "|   H("+hostagesDamage[i]+")  |";
 
 			////////System.out.println("HostageDamage: "+i+" "+hostagesDamage[i]);
 		}
@@ -951,6 +952,8 @@ public class Matrix extends SearchProblem {
 			// startPads[i]=padList[i*4]+","+padList[i*4+1];
 			// endPads[i]=padList[i*4+2]+","+padList[i*4+3];			
 		}
+		gridView[NeoR][NeoC] = "|   Neo   |";
+		gridView[TeleX][TeleY] = "|    TB   |";
 		int width = columns*11+4;
 		for(int i =-1;i<columns;i++)
 		{	
@@ -1070,8 +1073,17 @@ public class Matrix extends SearchProblem {
 //		String grid7 = "5,5;3;1,3;4,0;0,1,3,2,4,3,2,4,0,4;3,4,3,0,4,2;1,4,1,2,1,2,1,4,0,3,1,0,1,0,0,3;4,4,45,3,3,12,0,2,88";
 //		String grid8 = "5,5;2;4,3;2,1;2,0,0,4,0,3,0,1;3,1,3,2;4,4,3,3,3,3,4,4;4,0,17,1,2,54,0,0,46,4,1,22";
 //		String grid9 = "5,5;2;0,4;1,4;0,1,1,1,2,1,3,1,3,3,3,4;1,0,2,4;0,3,4,3,4,3,0,3;0,0,30,3,0,80,4,4,80";
-//		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
-		 System.out.println(solve(grid3,"AS2",true));
+		String grid10 = "5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
+		System.out.println(solve(grid10,"AS1",true));
+		MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+		System.out.println(String.format("Initial memory: %.2f GB",(double)memoryMXBean.getHeapMemoryUsage().getInit() /1073741824));
+
+		System.out.println(String.format("Used heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getUsed() /1073741824));
+
+		System.out.println(String.format("Max heap memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getMax() /1073741824));
+
+		System.out.println(String.format("Committed memory: %.2f GB", (double)memoryMXBean.getHeapMemoryUsage().getCommitted() /1073741824));
 //		System.out.println(solve(grid3,"AS2",true));
 //		System.out.println(m.goalTest("5,5;4;4,1;4,1;2,4,0,4,3,2,3,0,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;4,1,94,4,1,77,4,1,71,4,1,72;0,0,0,0;20;0;"));
 //		String initState="5,5;4;1,1;4,1;2,4,0,4,3,2,3,0,4,2,0,1,1,3,2,1;4,0,4,4,1,0;2,0,0,2,0,2,2,0;0,0,62,4,3,45,3,3,39,2,3,40";
